@@ -10,6 +10,7 @@ pub mod task;
 mod task_example;
 mod writer;
 
+
 use alloc::{borrow::ToOwned, sync::Arc};
 //use bootloader_api::config::Mapping;
 use writer::FrameBufferWriter;
@@ -152,6 +153,8 @@ fn my_entry_point(boot_info: &'static mut bootloader_api::BootInfo) -> ! {
     //For premptive multitasking, we use interrupts
     interrupts::init();
 
+    let x = input_str!("Hello world");
+    println!("value {}",x);
     //Let's experience getting string from keyboard and saving into a variable for use
     print!("Enter string: ");
     let input = match input_str() {
@@ -178,7 +181,7 @@ fn my_entry_point(boot_info: &'static mut bootloader_api::BootInfo) -> ! {
     }
 }
 
-#[panic_handler]
+#[cfg_attr(not(test), panic_handler)]
 fn panic(_info: &core::panic::PanicInfo) -> ! {
     println!("{}", _info);
     loop {
